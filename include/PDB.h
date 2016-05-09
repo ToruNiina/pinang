@@ -38,7 +38,7 @@ namespace pinang{
     {
         Atom atom_tmp;
         Residue resid_tmp;
-        Chain chain_tmp;
+        Chain ChainTypemp;
         Model model_tmp;
 
         _PDB_file_name = s;
@@ -71,7 +71,7 @@ namespace pinang{
                 model_tmp.reset();
                 model_tmp.set_model_ID(atom_tmp.serial());
 
-                chain_tmp.reset();
+                ChainTypemp.reset();
                 resid_tmp.reset();
                 atom_tmp.reset();
             }
@@ -79,12 +79,12 @@ namespace pinang{
             {
                 if (resid_tmp.m_residue_size() != 0)
                 {
-                    chain_tmp.add_residue(resid_tmp);
-                    chain_tmp.set_chain_ID(resid_tmp.chain_ID());
+                    ChainTypemp.add_residue(resid_tmp);
+                    ChainTypemp.set_chain_ID(resid_tmp.chain_ID());
                 }
-                model_tmp.add_chain(chain_tmp);
+                model_tmp.add_chain(ChainTypemp);
 
-                chain_tmp.reset();
+                ChainTypemp.reset();
                 resid_tmp.reset();
                 atom_tmp.reset();
             }
@@ -92,18 +92,18 @@ namespace pinang{
             {
                 if (resid_tmp.m_residue_size() != 0)
                 {
-                    chain_tmp.add_residue(resid_tmp);
-                    chain_tmp.set_chain_ID(resid_tmp.chain_ID());
+                    ChainTypemp.add_residue(resid_tmp);
+                    ChainTypemp.set_chain_ID(resid_tmp.chain_ID());
                 }
-                if (chain_tmp.m_chain_length() != 0)
+                if (ChainTypemp.m_chain_length() != 0)
                 {
-                    model_tmp.add_chain(chain_tmp);
+                    model_tmp.add_chain(ChainTypemp);
                 }
                 _models.push_back(model_tmp); // push back tmp model;
                 _n_model++;
 
                 model_tmp.reset();
-                chain_tmp.reset();
+                ChainTypemp.reset();
                 resid_tmp.reset();
                 atom_tmp.reset();
             }
@@ -111,12 +111,12 @@ namespace pinang{
             {
                 if (resid_tmp.m_residue_size() != 0)
                 {
-                    chain_tmp.add_residue(resid_tmp);
-                    chain_tmp.set_chain_ID(resid_tmp.chain_ID());
+                    ChainTypemp.add_residue(resid_tmp);
+                    ChainTypemp.set_chain_ID(resid_tmp.chain_ID());
                 }
-                if (chain_tmp.m_chain_length() != 0)
+                if (ChainTypemp.m_chain_length() != 0)
                 {
-                    model_tmp.add_chain(chain_tmp);
+                    model_tmp.add_chain(ChainTypemp);
                 }
                 if (model_tmp.m_model_size() != 0)
                 {
@@ -125,7 +125,7 @@ namespace pinang{
                 }
 
                 model_tmp.reset();
-                chain_tmp.reset();
+                ChainTypemp.reset();
                 resid_tmp.reset();
                 atom_tmp.reset();
             }
@@ -135,12 +135,12 @@ namespace pinang{
                 {
                     if (resid_tmp.m_residue_size() != 0)
                     {
-                        chain_tmp.add_residue(resid_tmp);
+                        ChainTypemp.add_residue(resid_tmp);
                         if (resid_tmp.m_atom(0).atom_flag() == "HETATM")
                         {
-                            chain_tmp.set_chain_ID(resid_tmp.chain_ID());
-                            model_tmp.add_chain(chain_tmp);
-                            chain_tmp.reset();
+                            ChainTypemp.set_chain_ID(resid_tmp.chain_ID());
+                            model_tmp.add_chain(ChainTypemp);
+                            ChainTypemp.reset();
                         }
 
                         resid_tmp.reset();
@@ -158,11 +158,11 @@ namespace pinang{
                 {
                     if (resid_tmp.m_residue_size() != 0)
                     {
-                        chain_tmp.add_residue(resid_tmp);
-                        chain_tmp.set_chain_ID(resid_tmp.chain_ID());
-                        model_tmp.add_chain(chain_tmp);
+                        ChainTypemp.add_residue(resid_tmp);
+                        ChainTypemp.set_chain_ID(resid_tmp.chain_ID());
+                        model_tmp.add_chain(ChainTypemp);
 
-                        chain_tmp.reset();
+                        ChainTypemp.reset();
                         resid_tmp.reset();
                     }
                     resid_tmp.set_resid_index(atom_tmp.resid_index());

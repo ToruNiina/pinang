@@ -100,9 +100,9 @@ int main(int argc, char *argv[])
         c0 = c0 + pdb1.m_model(mod_index - 1).m_chain(i);
     }
     pinang::Residue r0, r1;
-    pinang::chain_t cti1;
+    pinang::ChainType cti1;
     for (int i = 0; i < pdb1.m_model(mod_index - 1).m_model_size(); i++) {
-        if (pdb1.m_model(mod_index - 1).m_chain(i).chain_type() != pinang::water)
+        if (pdb1.m_model(mod_index - 1).m_chain(i).ChainTypeype() != pinang::water)
             continue;
         for (int m = 0; m < pdb1.m_model(mod_index - 1).m_chain(i).m_chain_length(); m++) {
             r0 = pdb1.m_model(mod_index - 1).m_chain(i).m_residue(m);
@@ -119,12 +119,12 @@ int main(int argc, char *argv[])
             pinang::Residue special_A, special_T, special_G, special_C;
 
             for (int j = 0; j < pdb1.m_model(mod_index - 1).m_model_size(); j++) {
-                if (pdb1.m_model(mod_index - 1).m_chain(j).chain_type() == pinang::water ||
-                    pdb1.m_model(mod_index - 1).m_chain(j).chain_type() == pinang::ion)
+                if (pdb1.m_model(mod_index - 1).m_chain(j).ChainTypeype() == pinang::water ||
+                    pdb1.m_model(mod_index - 1).m_chain(j).ChainTypeype() == pinang::ion)
                     continue;
                 for (int n = 0; n < pdb1.m_model(mod_index - 1).m_chain(j).m_chain_length(); n++) {
                     r1 = pdb1.m_model(mod_index - 1).m_chain(j).m_residue(n);
-                    cti1 = r1.chain_type();
+                    cti1 = r1.ChainTypeype();
                     std::vector<pinang::Residue> resi_group1;
                     if (cti1 == pinang::protein) {
                         resi_group1.push_back(r1);

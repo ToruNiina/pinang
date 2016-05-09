@@ -100,11 +100,11 @@ int main(int argc, char *argv[])
         c0 = c0 + pdb1.m_model(mod_index - 1).m_chain(i);
     }
     pinang::Residue r0, r1;
-    pinang::chain_t cti0, cti1;
+    pinang::ChainType cti0, cti1;
     for (int i = 0; i < pdb1.m_model(mod_index - 1).m_model_size(); i++) {
         for (int m = 0; m < pdb1.m_model(mod_index - 1).m_chain(i).m_chain_length(); m++) {
             r0 = pdb1.m_model(mod_index - 1).m_chain(i).m_residue(m);
-            cti0 = r0.chain_type();
+            cti0 = r0.ChainTypeype();
             if (cti0 == pinang::water || cti0 == pinang::ion)
                 continue;
             std::vector<pinang::Atom> atom_group0;
@@ -149,7 +149,7 @@ int main(int argc, char *argv[])
             for (int j = i + 1; j < pdb1.m_model(mod_index - 1).m_model_size(); j++) {
                 for (int n = 0; n < pdb1.m_model(mod_index - 1).m_chain(j).m_chain_length(); n++) {
                     r1 = pdb1.m_model(mod_index - 1).m_chain(j).m_residue(n);
-                    cti1 = r1.chain_type();
+                    cti1 = r1.ChainTypeype();
                     if (cti1 == pinang::water || cti1 == pinang::ion)
                         continue;
                     if ((cti0 == pinang::DNA || cti0 == pinang::na) &&

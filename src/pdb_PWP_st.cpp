@@ -101,7 +101,7 @@ int main(int argc, char *argv[])
     }
     pinang::Residue r0, r1;
     for (int i = 0; i < pdb1.m_model(mod_index - 1).m_model_size(); i++) {
-        if (pdb1.m_model(mod_index - 1).m_chain(i).chain_type() != pinang::water)
+        if (pdb1.m_model(mod_index - 1).m_chain(i).ChainTypeype() != pinang::water)
             continue;
         for (int m = 0; m < pdb1.m_model(mod_index - 1).m_chain(i).m_chain_length(); m++) {
             r0 = pdb1.m_model(mod_index - 1).m_chain(i).m_residue(m);
@@ -111,7 +111,7 @@ int main(int argc, char *argv[])
             std::vector<pinang::Residue> spec;
 
             for (int j = 0; j < pdb1.m_model(mod_index - 1).m_model_size(); j++) {
-                if (pdb1.m_model(mod_index - 1).m_chain(j).chain_type() != pinang::protein)
+                if (pdb1.m_model(mod_index - 1).m_chain(j).ChainTypeype() != pinang::protein)
                     continue;
                 double min_dist_W_PRO = 0;
                 pinang::Residue special0;

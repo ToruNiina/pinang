@@ -251,33 +251,33 @@ int main(int argc, char *argv[])
     inp_file.close();
 
     pinang::Model mdl0 = pdb1.m_model(mod_index-1);
-    pinang::Chain chain_tmp;
+    pinang::Chain ChainTypemp;
     int mdl_size = mdl0.m_model_size();
     for (i = 0; i < int(chain1_id.size()); i++)
         for (j = 0; j < mdl_size; ++j)
             if (mdl0.m_chain(j).chain_ID() == chain1_id[i]) {
-                chain_tmp = mdl0.m_chain(j);
-                int len1 = chain_tmp.m_chain_length();
+                ChainTypemp = mdl0.m_chain(j);
+                int len1 = ChainTypemp.m_chain_length();
                 for (int k = 1; k < len1; k++) { // start from 1! because residue 0 has no P!
-                    backbone1_nodes.push_back(chain_tmp.m_residue(k).m_P().coordinates());
+                    backbone1_nodes.push_back(ChainTypemp.m_residue(k).m_P().coordinates());
                 }
                 for (int k = 0; k < len1; k++) {
-                    base_positions1.push_back(chain_tmp.m_residue(k).m_B().coordinates());
+                    base_positions1.push_back(ChainTypemp.m_residue(k).m_B().coordinates());
                 }
-                chain_tmp.reset();
+                ChainTypemp.reset();
             }
     for (i = 0; i < int(chain2_id.size()); i++)
         for (j = 0; j < mdl_size; ++j)
             if (mdl0.m_chain(j).chain_ID() == chain2_id[i]) {
-                chain_tmp = mdl0.m_chain(j);
-                int len1 = chain_tmp.m_chain_length();
+                ChainTypemp = mdl0.m_chain(j);
+                int len1 = ChainTypemp.m_chain_length();
                 for (int k = 1; k < len1; k++) { // start from 1! because residue 0 has no P!
-                    backbone2_nodes.push_back(chain_tmp.m_residue(k).m_P().coordinates());
+                    backbone2_nodes.push_back(ChainTypemp.m_residue(k).m_P().coordinates());
                 }
                 for (int k = 0; k < len1; k++) {
-                    base_positions2.push_back(chain_tmp.m_residue(k).m_B().coordinates());
+                    base_positions2.push_back(ChainTypemp.m_residue(k).m_B().coordinates());
                 }
-                chain_tmp.reset();
+                ChainTypemp.reset();
             }
     if (backbone1_nodes.size() == 0 || base_positions1.size() == 0)
     {
@@ -498,10 +498,10 @@ int main(int argc, char *argv[])
 
 
     // ============= find the helix center and tangent for every P =============
-    double angle_lim = pinang::g_pi / 3;   // 60 degree;
-    double angle_lim2 = pinang::g_pi / 15;   // 12 degree;
-    double pi_over_36 = pinang::g_pi / 36; // 5 degree;
-    double pi_over_60 = pinang::g_pi / 60; // 3 degree;
+    double angle_lim = pinang::k_pi / 3;   // 60 degree;
+    double angle_lim2 = pinang::k_pi / 15;   // 12 degree;
+    double pi_over_36 = pinang::k_pi / 36; // 5 degree;
+    double pi_over_60 = pinang::k_pi / 60; // 3 degree;
     for (i = 0; i < int(backbone1_normals.size()); i++) {
         // if (i != 52 && i != 53 && i != 51)
         // if (i != 52)
@@ -820,7 +820,7 @@ int main(int argc, char *argv[])
         double major_g_w = 100000.0;
         pinang::Vec3d t3 = groove_D1 ^ nm; // plane normal vector
         double theta = 0;
-        double angle_lim = pinang::g_pi / 2;   // 90 degree;
+        double angle_lim = pinang::k_pi / 2;   // 90 degree;
         for (theta = - angle_lim; theta <= 0; theta += pi_over_60) {
             pinang::Vec3d I1;   // backbone 1
             pinang::Vec3d I2;   // backbone 2
@@ -868,10 +868,10 @@ int main(int argc, char *argv[])
         double ang1 = acos(nm * backbone1_tangents[kb1/10]);
         double ang2 = acos(nm * backbone2_tangents[kb2/10]);
         if (ang1 > 1.570795)
-            ang1 = pinang::g_pi - ang1;
+            ang1 = pinang::k_pi - ang1;
         if (ang2 > 1.570795)
-            ang2 = pinang::g_pi - ang2;
-        angle_lim = pinang::g_pi / 2 - min(ang1, ang2);
+            ang2 = pinang::k_pi - ang2;
+        angle_lim = pinang::k_pi / 2 - min(ang1, ang2);
         for (theta = 0; theta <= angle_lim; theta += pi_over_60) {
             pinang::Vec3d I3;   // backbone 1
             pinang::Vec3d I4;   // backbone 2

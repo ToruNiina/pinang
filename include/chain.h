@@ -18,8 +18,8 @@ namespace pinang {
         inline char chain_ID() const;
         inline void set_chain_ID(char a);
 
-        inline chain_t chain_type() const;
-        inline void set_chain_type(chain_t ct);
+        inline ChainType ChainTypeype() const;
+        inline void set_ChainTypeype(ChainType ct);
 
         inline Residue& m_residue(int n);
         inline int add_residue(const Residue& r);
@@ -41,7 +41,7 @@ namespace pinang {
 
     protected:
         char _chain_ID;
-        chain_t _chain_type;
+        ChainType _ChainTypeype;
         int _n_residue;
         std::vector<Residue> _residues;
     };
@@ -68,15 +68,15 @@ namespace pinang {
     //  \___|_| |_|\__,_|_|_| |_|  \__|\__, | .__/ \___|
     //                                 |___/|_|
     */
-    inline chain_t Chain::chain_type() const
+    inline ChainType Chain::ChainTypeype() const
     {
-        return _chain_type;
+        return _ChainTypeype;
     }
-    inline void Chain::set_chain_type(chain_t a)
+    inline void Chain::set_ChainTypeype(ChainType a)
     {
-        _chain_type = a;
+        _ChainTypeype = a;
         for (int i = 0; i < _n_residue; i++) {
-            _residues[i].set_chain_type(a);
+            _residues[i].set_ChainTypeype(a);
         }
         if (a == DNA) {
             for (int i = 0; i < _residues[0].m_residue_size(); i++) {
@@ -128,7 +128,7 @@ namespace pinang {
         // }
         _residues.push_back(r);
         _n_residue++;
-        _chain_type = r.chain_type();
+        _ChainTypeype = r.ChainTypeype();
         return 0;
     }
 
@@ -146,7 +146,7 @@ namespace pinang {
     */
     inline void Chain::pr_seq(int n) const
     {
-        if (_chain_type == water)
+        if (_ChainTypeype == water)
         {
             return;
         }
@@ -194,14 +194,14 @@ namespace pinang {
     }
     inline void Chain::output_fasta(std::ostream & f_fasta, std::string s0) const
     {
-        if (_chain_type == water)
+        if (_ChainTypeype == water)
             return;
         if (_n_residue <= 3)
             return;
 
         f_fasta << ">" << s0 << "_chain_"
                 << _chain_ID << "_type_"
-                << _chain_type
+                << _ChainTypeype
                 << std::endl;
 
         for (int i = 0; i < _n_residue; i++) {
@@ -212,13 +212,13 @@ namespace pinang {
 
     void Chain::output_cg_pos(std::ostream& o, int& n)
     {
-        if (_chain_type == water || _chain_type == other || _chain_type == none)
+        if (_ChainTypeype == water || _ChainTypeype == other || _ChainTypeype == none)
         {
             return;
         }
         o << " - Chain " << _chain_ID;
         o << " : " ;
-        switch (_chain_type) {
+        switch (_ChainTypeype) {
         case protein:
             o << "protein";
             break;
@@ -247,7 +247,7 @@ namespace pinang {
           << std::endl;
 
         int i = 0;
-        if (_chain_type != DNA && _chain_type != RNA && _chain_type != na)
+        if (_ChainTypeype != DNA && _ChainTypeype != RNA && _ChainTypeype != na)
         {
             for (i = 0; i < _n_residue; i++) {
                 o << std::setw(6) << ++n
@@ -310,13 +310,13 @@ namespace pinang {
 
     void Chain::output_top_mass(std::ostream& o, int& n)
     {
-        if (_chain_type == water || _chain_type == other || _chain_type == none)
+        if (_ChainTypeype == water || _ChainTypeype == other || _ChainTypeype == none)
         {
             return;
         }
 
         int i = 0;
-        if (_chain_type != DNA && _chain_type != RNA && _chain_type != na)
+        if (_ChainTypeype != DNA && _ChainTypeype != RNA && _ChainTypeype != na)
         {
             for (i = 0; i < _n_residue; i++) {
                 o << std::setw(11) << ++n
@@ -371,7 +371,7 @@ namespace pinang {
 
     void Chain::output_top_bond(std::ostream& o, int& n)
     {
-        if (_chain_type == water || _chain_type == other || _chain_type == none)
+        if (_ChainTypeype == water || _ChainTypeype == other || _ChainTypeype == none)
         {
             return;
         }
@@ -382,7 +382,7 @@ namespace pinang {
         double d_sb = 0;
         double d_sp = 0;
 
-        if (_chain_type != DNA && _chain_type != RNA && _chain_type != na)
+        if (_ChainTypeype != DNA && _ChainTypeype != RNA && _ChainTypeype != na)
         {
             for (i = 0; i < _n_residue - 1; i++) {
                 d = resid_ca_distance(_residues[i], _residues[i+1]);
@@ -455,7 +455,7 @@ namespace pinang {
 
     void Chain::output_top_angle(std::ostream& o, int& n)
     {
-        if (_chain_type == water || _chain_type == other || _chain_type == none)
+        if (_ChainTypeype == water || _ChainTypeype == other || _ChainTypeype == none)
         {
             return;
         }
@@ -463,7 +463,7 @@ namespace pinang {
         int i = 0;
         double a = 0;
         Vec3d v1, v2;
-        if (_chain_type != DNA && _chain_type != RNA && _chain_type != na)
+        if (_ChainTypeype != DNA && _ChainTypeype != RNA && _ChainTypeype != na)
         {
             for (i = 0; i < _n_residue-2; i++) {
                 v1 = _residues[i].m_C_alpha().coordinates()
@@ -580,7 +580,7 @@ namespace pinang {
 
     void Chain::output_top_dihedral(std::ostream& o, int& n)
     {
-        if (_chain_type == water || _chain_type == other || _chain_type == none)
+        if (_ChainTypeype == water || _ChainTypeype == other || _ChainTypeype == none)
         {
             return;
         }
@@ -588,7 +588,7 @@ namespace pinang {
         int i = 0;
         double d = 0;           // dihedral
         Vec3d v1, v2, v3, n1, n2;
-        if (_chain_type != DNA && _chain_type != RNA && _chain_type != na)
+        if (_ChainTypeype != DNA && _ChainTypeype != RNA && _ChainTypeype != na)
         {
             for (i = 0; i < _n_residue-3; i++) {
                 v1 = _residues[i].m_C_alpha().coordinates()
@@ -691,13 +691,13 @@ namespace pinang {
     {
         int i = 0, j = 0;
         double d = -1, f = -1;
-        chain_t cti, ctj;
+        ChainType cti, ctj;
         for (i = 0; i < _n_residue-4; i++) {
-            cti = _residues[i].chain_type();
+            cti = _residues[i].ChainTypeype();
             if (cti == water || cti == DNA || cti == RNA || cti == na || cti == ion)
                 continue;
             for (j = i + 4; j < _n_residue; j++) {
-                ctj = _residues[j].chain_type();
+                ctj = _residues[j].ChainTypeype();
                 if (ctj == water || ctj == DNA || ctj == RNA || ctj == na || ctj == ion)
                     continue;
                 d = resid_min_distance(_residues[i], _residues[j]);
@@ -722,14 +722,14 @@ namespace pinang {
         int i = 0, j = 0;
         double d = -1;
         int n = 0;
-        chain_t cti, ctj;
+        ChainType cti, ctj;
 
         for (i = 0; i < _n_residue-4; i++) {
-            cti = _residues[i].chain_type();
+            cti = _residues[i].ChainTypeype();
             if (cti == water || cti == DNA || cti == RNA || cti == na || cti == ion)
                 continue;
             for (j = i + 4; j < _n_residue; j++) {
-                ctj = _residues[j].chain_type();
+                ctj = _residues[j].ChainTypeype();
                 if (ctj == water || ctj == DNA || ctj == RNA || ctj == na || ctj == ion)
                     continue;
                 d = resid_min_distance(_residues[i], _residues[j]);
@@ -744,7 +744,7 @@ namespace pinang {
     inline Chain::Chain()
     {
         _chain_ID = -1;
-        _chain_type = none;
+        _ChainTypeype = none;
         _residues.clear();
         _n_residue = 0;
     }
@@ -752,7 +752,7 @@ namespace pinang {
     inline void Chain::reset()
     {
         _chain_ID = -1;
-        _chain_type = none;
+        _ChainTypeype = none;
         _residues.clear();
         _n_residue = 0;
     }

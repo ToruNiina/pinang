@@ -150,17 +150,17 @@ int main(int argc, char *argv[])
 
   std::vector<pinang::Vec3d> c_alpha_coors;
   pinang::Model mdl0 = pdb1.m_model(mod_index-1);
-  pinang::Chain chain_tmp;
+  pinang::Chain ChainTypemp;
   int mdl_size = mdl0.m_model_size();
   for (i = 0; i < int(chain_id.size()); ++i)
     for (j = 0; j < mdl_size; ++j)
       if (mdl0.m_chain(j).chain_ID() == chain_id[i]) {
-        chain_tmp = mdl0.m_chain(j);
-        int len1 = chain_tmp.m_chain_length();
+        ChainTypemp = mdl0.m_chain(j);
+        int len1 = ChainTypemp.m_chain_length();
         for (int k = 1; k < len1; k++) {
-          c_alpha_coors.push_back(chain_tmp.m_residue(k).m_C_alpha().coordinates());
+          c_alpha_coors.push_back(ChainTypemp.m_residue(k).m_C_alpha().coordinates());
         }
-        chain_tmp.reset();
+        ChainTypemp.reset();
       }
 
   std::cout << " ... Calculating ... " << std::endl;
