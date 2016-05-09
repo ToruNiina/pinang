@@ -8,6 +8,7 @@
 #include <cstdlib>
 #include <Eigen/Core>
 
+#include "constants.h"
 #include "atom.h"
 
 namespace pinang {
@@ -21,8 +22,9 @@ class Residue
   inline void reset();
 
   inline std::string get_resid_name() const;
-  inline char get_short_name() const;
+  inline std::string get_short_name() const;
   void set_resid_name(const std::string& s);
+  void set_residue_by_name(const std::string& s);
 
   inline char get_chain_ID() const;
   inline void set_chain_ID(char a);
@@ -39,23 +41,24 @@ class Residue
   inline double get_resid_mass() const;
   inline void set_resid_mass(double c);
 
-  inline Atom& get_atom(int n);
+  inline const Atom& get_atom(int n) const;
+  inline int set_atom(int n, const Atom& a);
   inline int add_atom(const Atom& a);
   inline int delete_atom(const int i);
 
   inline int get_residue_size() const;
 
-  inline Atom& get_C_alpha();
-  inline Atom& get_C_beta();
-  inline Atom& get_P();
-  inline Atom& get_S();
-  inline Atom& get_B();
+  inline const Atom& get_C_alpha() const;
+  inline const Atom& get_C_beta() const;
+  inline const Atom& get_P() const;
+  inline const Atom& get_S() const;
+  inline const Atom& get_B() const;
 
   void set_cg_na();
 
  protected:
   std::string resid_name_;
-  char short_name_;
+  std::string short_name_;
   char chain_ID_;
   int resid_index_;
   std::vector<Atom> atoms_;
@@ -71,108 +74,31 @@ class Residue
   ChainType chain_type_;
 };
 
-/*                _     _
-//  _ __ ___  ___(_) __| |  _ __   __ _ _ __ ___   ___
-// | '__/ _ \/ __| |/ _` | | '_ \ / _` | '_ ` _ \ / _ \
-// | | |  __/\__ \ | (_| | | | | | (_| | | | | | |  __/
-// |_|  \___||___/_|\__,_| |_| |_|\__,_|_| |_| |_|\___|
-*/
-inline std::string Residue::resid_name() const
+
+inline std::string Residue::get_resid_name() const
 {
   return resid_name_;
 }
-inline char Residue::short_name() const
+inline std::string Residue::get_short_name() const
 {
   return short_name_;
 }
 void Residue::set_resid_name(const std::string& s)
 {
   resid_name_ = s;
-  char c = s[0];
-
-  switch (c) {
-    case 'A':
-      if (resid_name_ == "ARG") {short_name_ = 'R'; charge_ = 1.0; mass_ = 156.19; chain_type_ = protein;}
-      else if (resid_name_ == "ASP") {short_name_ = 'D'; charge_ = -1.0;
-        mass_ = 115.09; chain_type_ = protein;}
-      else if (resid_name_ == "ASN") {short_name_ = 'N'; mass_ = 114.11; chain_type_ = protein;}
-      else if (resid_name_ == "ALA") {short_name_ = 'A'; mass_ = 71.09; chain_type_ = protein;}
-      else if (resid_name_ == "A") {short_name_ = 'A'; chain_type_ = na;mass_ = 134.12;}
-      break;
-    case 'C':
-      if (resid_name_ == "CYS") {short_name_ = 'C';  mass_ = 103.15;  chain_type_ = protein;}
-      else if (resid_name_ == "C") {short_name_ = 'C'; chain_type_ = na;  mass_ = 110.09;}
-      else if (resid_name_ == "CA") {short_name_ = 'c'; charge_ = 2.0; mass_ = 40.08; chain_type_ = ion;}
-      break;
-    case 'D':
-      if      (resid_name_ == "DA" || resid_name_ == "DA3" || resid_name_ == "DA5") {
-        short_name_ = 'A'; chain_type_ = DNA; mass_ = 134.12;}
-      else if (resid_name_ == "DC" || resid_name_ == "DC3" || resid_name_ == "DC5") {
-        short_name_ = 'C'; chain_type_ = DNA;  mass_ = 110.09;}
-      else if (resid_name_ == "DG" || resid_name_ == "DG3" || resid_name_ == "DG5") {
-        short_name_ = 'G'; chain_type_ = DNA;  mass_ = 150.12;}
-      else if (resid_name_ == "DT" || resid_name_ == "DT3" || resid_name_ == "DT5") {
-        short_name_ = 'T'; chain_type_ = DNA;  mass_ = 125.091;}
-      break;
-    case 'G':
-      if (resid_name_ == "GLU") {short_name_ = 'E'; charge_ = -1.0; mass_ = 129.12; chain_type_ = protein;}
-      else if (resid_name_ == "GLN") {short_name_ = 'Q';  mass_ = 128.14;  chain_type_ = protein;}
-      else if (resid_name_ == "GLY") {short_name_ = 'G';  mass_ = 57.05; chain_type_ = protein;}
-      else if (resid_name_ == "G") {short_name_ = 'G'; chain_type_ = na;  mass_ = 150.12;}
-      break;
-    case 'H':
-      if (resid_name_ == "HIS") {short_name_ = 'H';  mass_ = 137.14; charge_ = 1.0; chain_type_ = protein;}
-      else if (resid_name_ == "HOH") {short_name_ = 'w';   chain_type_ = water;}
-      break;
-    case 'I':
-      if (resid_name_ == "ILE") {short_name_ = 'I';  mass_ = 113.16; chain_type_ = protein;}
-      break;
-    case 'L':
-      if (resid_name_ == "LYS") {short_name_ = 'K'; charge_ = 1.0; mass_ = 128.17; chain_type_ = protein;}
-      else if (resid_name_ == "LEU") {short_name_ = 'L';  mass_ = 113.16; chain_type_ = protein;}
-      break;
-    case 'M':
-      if (resid_name_ == "MET") {short_name_ = 'M';  mass_ = 131.19; chain_type_ = protein;}
-      else if (resid_name_ == "MG") {short_name_ = 'm';  mass_ = 24.305; charge_ = 2.0; chain_type_ = ion;}
-      break;
-    case 'P':
-      if (resid_name_ == "PRO") {short_name_ = 'P';  mass_ = 97.12; chain_type_ = protein;}
-      else if (resid_name_ == "PHE") {short_name_ = 'F';  mass_ = 147.18; chain_type_ = protein;}
-      break;
-    case 'R':
-      if (resid_name_ == "RA") {short_name_ = 'A'; chain_type_ = RNA; mass_ = 134.12;}
-      else if (resid_name_ == "RU") {short_name_ = 'U'; chain_type_ = RNA; mass_ = 111.08;}
-      else if (resid_name_ == "RC") {short_name_ = 'C'; chain_type_ = RNA;  mass_ = 110.09;}
-      else if (resid_name_ == "RG") {short_name_ = 'G';  chain_type_ = RNA; mass_ = 150.12;}
-      break;
-    case 'S':
-      if (resid_name_ == "SER") {short_name_ = 'S';  mass_ = 87.08; chain_type_ = protein;}
-      else if (resid_name_ == "SEC") {short_name_ = 'U'; chain_type_ = protein;}
-      break;
-    case 'T':
-      if (resid_name_ == "TYR") {short_name_ = 'Y';  mass_ = 163.18; chain_type_ = protein;}
-      else if (resid_name_ == "TRP") {short_name_ = 'W'; mass_ = 186.21; chain_type_ = protein;}
-      else if (resid_name_ == "THR") {short_name_ = 'T'; mass_ = 101.11; chain_type_ = protein;}
-      else if (resid_name_ == "T") {short_name_ = 'T';  chain_type_ = DNA; mass_ = 125.091;}
-      break;
-    case 'U':
-      if (resid_name_ == "U") {short_name_ = 'U'; chain_type_ = RNA; mass_ = 111.08;}
-      break;
-    case 'V':
-      if (resid_name_ == "VAL") {short_name_ = 'V'; mass_ = 99.14; chain_type_ = protein;}
-      break;
-    default:
-      if (resid_name_ == "ZN") {short_name_ = 'z'; charge_ = 2.0; mass_ = 65.409; chain_type_ = ion;}
-  }
+}
+void Residue::set_residue_by_name(const std::string& s)
+{
+  PhysicalProperty p;
+  resid_name_ = s;
+  short_name_ = p.get_short_name(s);
+  chain_type_ = p.get_chain_type(s);
+  mass_ = p.get_mass(s);
+  charge_ = p.get_charge(s);
 }
 
-/*      _           _         ___ ____
-//  ___| |__   __ _(_)_ __   |_ _|  _ \
-// / __| '_ \ / _` | | '_ \   | || | | |
-//| (__| | | | (_| | | | | |  | || |_| |
-// \___|_| |_|\__,_|_|_| |_| |___|____/
-*/
-inline char Residue::chain_ID() const
+
+inline char Residue::get_chain_ID() const
 {
   return chain_ID_;
 }
@@ -181,44 +107,31 @@ inline void Residue::set_chain_ID(char a)
   chain_ID_ = a;
 }
 
-/*       _           _         _
-//   ___| |__   __ _(_)_ __   | |_ _   _ _ __   ___
-//  / __| '_ \ / _` | | '_ \  | __| | | | '_ \ / _ \
-// | (__| | | | (_| | | | | | | |_| |_| | |_) |  __/
-//  \___|_| |_|\__,_|_|_| |_|  \__|\__, | .__/ \___|
-//                                 |___/|_|
-*/
-inline ChainType Residue::chain_type() const
+
+inline ChainType Residue::get_chain_type() const
 {
   return ChainTypeype_;
 }
 inline void Residue::set_ChainTypeype(ChainType a)
 {
   ChainTypeype_ = a;
-  if (a == DNA) {
-    // std::string s = resid_name_;
-    if      (resid_name_ == "A" || resid_name_ == "A3" || resid_name_ == "A5") {
-      resid_name_ = "DA"; short_name_ = 'A';  mass_ = 134.12;}
-    else if (resid_name_ == "C" || resid_name_ == "C3" || resid_name_ == "C5") {
-      resid_name_ = "DC"; short_name_ = 'C';   mass_ = 110.09;}
-    else if (resid_name_ == "G" || resid_name_ == "G3" || resid_name_ == "G5") {
-      resid_name_ = "DG"; short_name_ = 'G';   mass_ = 150.12;}
-    else if (resid_name_ == "T" || resid_name_ == "T3" || resid_name_ == "T5") {
-      resid_name_ = "DT"; short_name_ = 'T';   mass_ = 125.091;}
-    // std::cout << resid_name_ << std::endl;
-    for (int i = 0; i < n_atom_; i++) {
-      atoms_[i].set_resid_name(resid_name_);
-    }
-  }
+  // if (a == DNA) {
+  //   if      (resid_name_ == "A" || resid_name_ == "A3" || resid_name_ == "A5") {
+  //     resid_name_ = "DA"; short_name_ = 'A';  mass_ = 134.12;}
+  //   else if (resid_name_ == "C" || resid_name_ == "C3" || resid_name_ == "C5") {
+  //     resid_name_ = "DC"; short_name_ = 'C';   mass_ = 110.09;}
+  //   else if (resid_name_ == "G" || resid_name_ == "G3" || resid_name_ == "G5") {
+  //     resid_name_ = "DG"; short_name_ = 'G';   mass_ = 150.12;}
+  //   else if (resid_name_ == "T" || resid_name_ == "T3" || resid_name_ == "T5") {
+  //     resid_name_ = "DT"; short_name_ = 'T';   mass_ = 125.091;}
+  //   for (int i = 0; i < n_atom_; i++) {
+  //     atoms_[i].set_resid_name(resid_name_);
+  //   }
+  // }
 }
 
-/*                _     _   _           _
-//  _ __ ___  ___(_) __| | (_)_ __   __| | _____  __
-// | '__/ _ \/ __| |/ _` | | | '_ \ / _` |/ _ \ \/ /
-// | | |  __/\__ \ | (_| | | | | | | (_| |  __/>  <
-// |_|  \___||___/_|\__,_| |_|_| |_|\__,_|\___/_/\_\
-*/
-inline int Residue::resid_index() const
+
+inline int Residue::get_resid_index() const
 {
   return resid_index_;
 }
@@ -227,14 +140,8 @@ inline void Residue::set_resid_index(int i)
   resid_index_ = i;
 }
 
-/*                _     _        _
-//  _ __ ___  ___(_) __| |   ___| |__   __ _ _ __ __ _  ___
-// | '__/ _ \/ __| |/ _` |  / __| '_ \ / _` | '__/ _` |/ _ \
-// | | |  __/\__ \ | (_| | | (__| | | | (_| | | | (_| |  __/
-// |_|  \___||___/_|\__,_|  \___|_| |_|\__,_|_|  \__, |\___|
-//                                               |___/
-*/
-inline double Residue::resid_charge() const
+
+inline double Residue::get_resid_charge() const
 {
   return charge_;
 }
@@ -243,7 +150,7 @@ inline void Residue::set_resid_charge(double c)
   charge_ = c;
 }
 
-inline double Residue::resid_mass() const
+inline double Residue::get_resid_mass() const
 {
   return mass_;
 }
@@ -252,37 +159,24 @@ inline void Residue::set_resid_mass(double m)
   mass_ = m;
 }
 
-/*                     _
-//  _ __ ___      __ _| |_ ___  _ __ ___
-// | '_ ` _ \    / _` | __/ _ \| '_ ` _ \
-// | | | | | |  | (_| | || (_) | | | | | |
-// |_| |_| |_|___\__,_|\__\___/|_| |_| |_|
-//          |_____|
-*/
-inline Atom& Residue::m_atom(int n)
+
+inline const Atom& Residue::get_atom(int n) cosnt
 {
   if (atoms_.empty())
   {
-    std::cout << " ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ " << std::endl;
-    std::cout << " ~             PINANG :: Residue              ~ " << std::endl;
-    std::cout << " ============================================== " << std::endl;
-    std::cerr << "ERROR: No Atoms found in Residue: "
+    std::cerr << "ERROR: No Atoms in Residue: "
               << resid_index_ << std::endl;
     exit(EXIT_SUCCESS);
-  } else {
-    if (n >= int(atoms_.size()))
-    {
-      std::cout << " ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ " << std::endl;
-      std::cout << " ~             PINANG :: Residue              ~ " << std::endl;
-      std::cout << " ============================================== " << std::endl;
-      std::cerr << "ERROR: Atom index out of range in Residue: "
-                << resid_index_ << std::endl;
-      exit(EXIT_SUCCESS);
-    } else {
-      return atoms_[n];
-    }
+  } 
+  if (n >= int(atoms_.size()))
+  {
+    std::cerr << "ERROR: Atom index out of range in Residue: "
+              << resid_index_ << std::endl;
+    exit(EXIT_SUCCESS);
   }
+  return atoms_[n];
 }
+
 inline int Residue::add_atom(const Atom& a)
 {
   if (a.resid_index() != resid_index_)
@@ -331,29 +225,28 @@ inline int Residue::delete_atom(const int i)
 }
 
 
-/*   ____         _       _
-//  / ___|   __ _| |_ __ | |__   __ _
-// | |      / _` | | '_ \| '_ \ / _` |
-// | |___  | (_| | | |_) | | | | (_| |
-//  \____|  \__,_|_| .__/|_| |_|\__,_|
-//                 |_|
-*/
-inline Atom& Residue::m_C_alpha()
+
+inline const Atom& Residue::get_C_alpha() const
 {
   return C_alpha_;
 }
 
-inline Atom& Residue::m_P()
+inline const Atom& Residue::get_C_beta() const
+{
+  return C_beta_;
+}
+
+inline const Atom& Residue::get_P() const
 {
   return P_;
 }
 
-inline Atom& Residue::m_S()
+inline const Atom& Residue::get_S() const
 {
   return S_;
 }
 
-inline Atom& Residue::m_B()
+inline const Atom& Residue::get_B() const
 {
   return B_;
 }
@@ -457,13 +350,8 @@ void Residue::set_cg_na()
     B_.set_coords(com_B);
 }
 
-/*                _     _       _
-//  _ __ ___  ___(_) __| |  ___(_)_______
-// | '__/ _ \/ __| |/ _` | / __| |_  / _ \
-// | | |  __/\__ \ | (_| | \__ \ |/ /  __/
-// |_|  \___||___/_|\__,_| |___/_/___\___|
-*/
-inline int Residue::m_residue_size() const
+
+inline int Residue::get_residue_size() const
 {
   return n_atom_;
 }
@@ -472,7 +360,7 @@ inline int Residue::m_residue_size() const
 inline Residue::Residue()
 {
   resid_name_ = "";
-  short_name_ = '0';
+  short_name_ = "0";
   chain_ID_ = -1;
   resid_index_ = -1;
   atoms_.clear();
@@ -490,7 +378,7 @@ inline Residue::Residue()
 inline void Residue::reset()
 {
   resid_name_ = "";
-  short_name_ = '0';
+  short_name_ = "0";
   chain_ID_ = -1;
   resid_index_ = -1;
   atoms_.clear();
@@ -505,12 +393,8 @@ inline void Residue::reset()
   C_alpha_.reset();
 }
 
-/*              _               __
-//   ___  _   _| |_ ___ _ __   / _|_   _ _ __   ___
-//  / _ \| | | | __/ _ \ '__| | |_| | | | '_ \ / __|
-// | (_) | |_| | ||  __/ |    |  _| |_| | | | | (__
-//  \___/ \__,_|\__\___|_|    |_|  \__,_|_| |_|\___|
-*/
+
+// Other functions -----------------------------------------------------------
 inline std::ostream& operator<<(std::ostream& o, Residue& r)
 {
   // o << "Residue "
