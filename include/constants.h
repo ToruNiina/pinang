@@ -88,9 +88,9 @@ inline PhysicalProperty::PhysicalProperty()
   map_resName_shortName["RC "] = "rC";
   map_resName_shortName["RU "] = "rU";
   map_resName_shortName["U  "] = "nU";
-  map_resName_shortName["ZN "] = "zn";
-  map_resName_shortName["CA "] = "ca";
-  map_resName_shortName["MG "] = "mg";
+  map_resName_shortName["ZN "] = "iz";
+  map_resName_shortName["CA "] = "ic";
+  map_resName_shortName["MG "] = "im";
   map_resName_shortName["HOH"] = "wt";
 
   // ---------- full name to mass ----------

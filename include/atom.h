@@ -390,9 +390,9 @@ std::istream& operator>>(std::istream& i, Atom& a)
     tmp_sstr.str(pdb_line.substr(79,1));
     tmp_sstr >> tmp_str;
     if (tmp_str == "+") {
-      a.set_charge(tmp_str);
+      a.set_charge(tmp_ui);
     } else if (tmp_str == "-") {
-      a.set_charge(-tmp_str);
+      a.set_charge(-tmp_ui);
     }
     tmp_sstr.clear();
     tmp_str.clear();
