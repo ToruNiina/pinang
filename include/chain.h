@@ -280,6 +280,7 @@ void Chain::output_top_mass(std::ostream& o, int& n)
           << std::setw(8) << r.get_resid_index()
           << std::setw(8) << r.get_resid_name()
           << std::setw(8) << "P"
+          << std::setiosflags(std::ios_base::fixed) << std::setprecision(2)
           << std::setw(10) << 94.93
           << std::setw(8) << -0.6
           << std::endl;
@@ -289,6 +290,7 @@ void Chain::output_top_mass(std::ostream& o, int& n)
         << std::setw(8) << r.get_resid_name()
         << std::setw(8) << "S"
         << std::setw(10) << 99.11
+        << std::setiosflags(std::ios_base::fixed) << std::setprecision(2)
         << std::setw(8) << 0.0
         << std::endl;
       o << std::setw(11) << ++n

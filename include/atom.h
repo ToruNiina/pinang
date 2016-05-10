@@ -291,8 +291,7 @@ inline std::ostream& operator<<(std::ostream& o, const Atom& a)
       << std::setw(6) << a.get_occupancy()
       << std::setw(6) << a.get_temperature_factor() << "      "
       << std::setw(4) << a.get_segment_ID()
-      << std::setw(2) << a.get_element()
-      << std::setw(2) << a.get_charge();
+      << std::setw(2) << a.get_element();
   } else {
     o << a.get_atom_flag();
   }
@@ -358,10 +357,13 @@ std::istream& operator>>(std::istream& i, Atom& a)
 
     tmp_sstr.str(pdb_line.substr(30,8));
     tmp_sstr >> tmp_coor_x;
+    tmp_sstr.clear();
     tmp_sstr.str(pdb_line.substr(38,8));
     tmp_sstr >> tmp_coor_y;
+    tmp_sstr.clear();
     tmp_sstr.str(pdb_line.substr(46,8));
     tmp_sstr >> tmp_coor_z;
+    tmp_sstr.clear();
     a.set_coords(tmp_coor_x, tmp_coor_y, tmp_coor_z);
     tmp_sstr.clear();
 

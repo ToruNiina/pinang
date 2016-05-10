@@ -80,14 +80,14 @@ inline void Model::add_chain(Chain& c)
 inline void Model::print_sequence(int n) const
 {
   int i = 0;
-  for (i = 0; i < n_chain_; i++) 
+  for (i = 0; i < n_chain_; i++)
     chains_[i].pr_seq(n);
 }
 
 inline void Model::output_fasta(std::ostream & f_fasta, std::string s) const
 {
   int i = 0;
-  for (i = 0; i < n_chain_; i++) 
+  for (i = 0; i < n_chain_; i++)
     chains_[i].output_fasta(f_fasta, s);
 }
 
@@ -293,23 +293,46 @@ void Model::output_top_nonbonded(std::ostream& o)
     {
       c_tmp.reset();
 
+      Atom S = chains_[i].get_residue(0).get_S();
+      Atom B = chains_[i].get_residue(0).get_B();
       r_tmp.reset();
-      r_tmp.add_atom(chains_[i].get_residue(0).get_S());
+      r_tmp.set_residue_by_name(S.get_resid_name());
+      r_tmp.set_chain_ID(S.get_chain_ID());
+      r_tmp.set_resid_index(S.get_resid_index());
+      r_tmp.add_atom(S);
       c_tmp.add_residue(r_tmp);
 
       r_tmp.reset();
-      r_tmp.add_atom(chains_[i].get_residue(0).get_B());
+      r_tmp.set_residue_by_name(B.get_resid_name());
+      r_tmp.set_chain_ID(B.get_chain_ID());
+      r_tmp.set_resid_index(B.get_resid_index());
+      r_tmp.add_atom(B);
       c_tmp.add_residue(r_tmp);
+
 
       for (int j = 1; j < chains_[i].get_chain_length(); j++) {
+        Atom P = chains_[i].get_residue(j).get_P();
+        Atom S = chains_[i].get_residue(j).get_S();
+        Atom B = chains_[i].get_residue(j).get_B();
         r_tmp.reset();
-        r_tmp.add_atom(chains_[i].get_residue(j).get_P());
+        r_tmp.set_residue_by_name(P.get_resid_name());
+        r_tmp.set_chain_ID(P.get_chain_ID());
+        r_tmp.set_resid_index(P.get_resid_index());
+        r_tmp.add_atom(P);
         c_tmp.add_residue(r_tmp);
+
         r_tmp.reset();
-        r_tmp.add_atom(chains_[i].get_residue(j).get_S());
+        r_tmp.set_residue_by_name(S.get_resid_name());
+        r_tmp.set_chain_ID(S.get_chain_ID());
+        r_tmp.set_resid_index(S.get_resid_index());
+        r_tmp.add_atom(S);
         c_tmp.add_residue(r_tmp);
+
         r_tmp.reset();
-        r_tmp.add_atom(chains_[i].get_residue(j).get_B());
+        r_tmp.set_residue_by_name(B.get_resid_name());
+        r_tmp.set_chain_ID(B.get_chain_ID());
+        r_tmp.set_resid_index(B.get_resid_index());
+        r_tmp.add_atom(B);
         c_tmp.add_residue(r_tmp);
       }
       c_tmp.set_chain_type(ct);
@@ -318,10 +341,21 @@ void Model::output_top_nonbonded(std::ostream& o)
     }
     c0 = c0 + chains_[i];
   }
+  // std::cout << "testing....." << c0.get_chain_length();
+  // for (int ij = 0; ij < c0.get_chain_length(); ++ij){
+  //   std::cout << ij << "=-=-=-=-=-=" << std::endl;
+  //   std::cout << c0.get_residue(ij).get_residue_size() << "   "
+  //             << c0.get_residue(ij).get_chain_type() << "   "
+  //             << c0.get_residue(ij).get_resid_name() << "   "
+  //             << c0.get_residue(ij).get_resid_index() << std::endl;
+  // }
 
   o << "[ native ]"
     << std::setw(6) << c0.get_native_contact_number()
     << std::endl;
+  // std::cout << "[ native ]"
+  //   << std::setw(6) << c0.get_native_contact_number()
+  //   << std::endl;
   o << "# "
     << std::setw(6) << "pi"
     << std::setw(6) << "pj"

@@ -140,13 +140,13 @@ inline void Residue::set_resid_index(int i)
 
 inline int Residue::get_term_flag() const
 {
-  return resid_index_;
+  return term_flag_;
 }
 inline void Residue::set_term_flag(int i)
 {
   // 5: 5';   3: 3';   0: not terminus;
   // -1: N;   1: C;
-  resid_index_ = i;
+  term_flag_ = i;
 }
 
 
