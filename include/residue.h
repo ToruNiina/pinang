@@ -44,6 +44,8 @@ class Residue
   inline double get_resid_mass() const;
   inline void set_resid_mass(double c);
 
+  inline void self_check() const;
+
   inline Atom& get_atom(int n);
   inline int add_atom(const Atom& a);
   inline int delete_atom(const int i);
@@ -124,19 +126,6 @@ inline ChainType Residue::get_chain_type() const
 inline void Residue::set_chain_type(ChainType a)
 {
   chain_type_ = a;
-  // if (a == DNA) {
-  //   if      (resid_name_ == "A" || resid_name_ == "A3" || resid_name_ == "A5") {
-  //     resid_name_ = "DA"; short_name_ = 'A';  mass_ = 134.12;}
-  //   else if (resid_name_ == "C" || resid_name_ == "C3" || resid_name_ == "C5") {
-  //     resid_name_ = "DC"; short_name_ = 'C';   mass_ = 110.09;}
-  //   else if (resid_name_ == "G" || resid_name_ == "G3" || resid_name_ == "G5") {
-  //     resid_name_ = "DG"; short_name_ = 'G';   mass_ = 150.12;}
-  //   else if (resid_name_ == "T" || resid_name_ == "T3" || resid_name_ == "T5") {
-  //     resid_name_ = "DT"; short_name_ = 'T';   mass_ = 125.091;}
-  //   for (int i = 0; i < n_atom_; i++) {
-  //     atoms_[i].set_resid_name(resid_name_);
-  //   }
-  // }
 }
 
 
@@ -157,7 +146,7 @@ inline int Residue::get_term_flag() const
 inline void Residue::set_term_flag(int i)
 {
   // 5: 5';   3: 3';   0: not terminus;
-  // -1: N;   1: C; 
+  // -1: N;   1: C;
   resid_index_ = i;
 }
 
@@ -201,7 +190,7 @@ inline Atom& Residue::get_atom(int n)
 
 inline int Residue::add_atom(const Atom& a)
 {
-  if (a.resid_index() != resid_index_)
+  if (a.get_resid_index() != resid_index_ )
   {
     return 1;
   }
@@ -238,6 +227,7 @@ inline int Residue::add_atom(const Atom& a)
   n_atom_++;
   return 0;
 }
+
 inline int Residue::delete_atom(const int i)
 {
   if (i >= n_atom_){
@@ -300,36 +290,50 @@ inline Atom& Residue::get_B()
   return B_;
 }
 
-inline void set_C_alpha()
+inline void Residue::set_C_alpha()
 {
   for (const Atom& b : atoms_) {
-    if (b.atom_name() == "CA  ")
+    if (b.get_atom_name() == "CA  ")
       C_alpha_ = b;
     break;
   }
 }
 
-inline void set_C_beta()
+inline void Residue::set_C_beta()
 {
   for (const Atom& b : atoms_) {
-    if (b.atom_name() == "CB  ")
-      C_alpha_ = b;
+    if (b.get_atom_name() == "CB  ")
+      C_beta_ = b;
     break;
   }
 }
 
-inline void set_P(const Atom& a)
+inline void Residue::set_P(const Atom& a)
 {
   P_ = a;
 }
-inline void set_S(const Atom& a)
+inline void Residue::set_S(const Atom& a)
 {
   S_ = a;
 }
-inline void set_B(const Atom& a)
+inline void Residue::set_B(const Atom& a)
 {
   B_ = a;
 }
+
+inline void Residue::self_check() const
+{
+  for (const Atom& a : atoms_) {
+    if (a.get_chain_ID() != chain_ID_ || a.get_resid_index() != resid_index_
+        || a.get_resid_name() != resid_name_)
+    {
+      std::cerr << "ERROR: Inconsistent chain ID or residue index or residue type in Residue "
+                << resid_index_ << std::endl;
+      exit(EXIT_SUCCESS);
+    }
+  }
+}
+
 
 // void Residue::set_cg_na()
 // {
@@ -447,6 +451,7 @@ inline Residue::Residue()
   n_atom_ = 0;
   charge_ = 0.0;
   mass_ = 100.0;
+  term_flag_ = 0;
 
   C_alpha_.reset();
   C_beta_.reset();
@@ -466,6 +471,7 @@ inline void Residue::reset()
   n_atom_ = 0;
   charge_ = 0.0;
   mass_ = 100.0;
+  term_flag_ = 0;
 
   chain_type_ = none;
   P_.reset();
@@ -480,7 +486,7 @@ inline void Residue::reset()
 inline std::ostream& operator<<(std::ostream& o, Residue& r)
 {
   int i = 0;
-  for (i = 0; i < r.get_residue_size(); i++) 
+  for (i = 0; i < r.get_residue_size(); i++)
     o << r.get_atom(i) << std::endl;
 
   return o;

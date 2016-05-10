@@ -396,8 +396,13 @@ std::istream& operator>>(std::istream& i, Atom& a)
     }
     tmp_sstr.clear();
     tmp_str.clear();
+  } else if (a.atom_flag() == "MODEL ") {
+    tmp_sstr.str(pdb_line.substr(10,4));
+    tmp_sstr >> _tmp_ui;
+    a.set_serial(_tmp_ui);  // Actually this is the model index (serial);
+    tmp_sstr.clear();
   } else {
-    std::cerr << "ERROR: Wrong PDB ATOM format!" << std::endl;
+    // std::cerr << "ERROR: Wrong PDB ATOM format!" << std::endl;
   }
 
   if (!i)

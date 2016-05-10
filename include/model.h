@@ -12,7 +12,7 @@ class Model
 {
  public:
   Model();
-  virtual ~Model() {_chains.clear();}
+  virtual ~Model() {chains_.clear();}
 
   inline void reset();
 
@@ -37,78 +37,79 @@ class Model
   void output_top_nonbonded(std::ostream& o);
 
  protected:
-  int _model_ID;
-  std::vector<Chain> _chains;
-  int _n_chain;
+  int model_ID_;
+  std::vector<Chain> chains_;
+  int n_chain_;
 };
 
 inline int Model::get_model_ID() const
 {
-  return _model_ID;
+  return model_ID_;
 }
 inline void Model::set_model_ID(int n)
 {
-  _model_ID = n;
+  model_ID_ = n;
 }
 
 
 inline Chain& Model::get_chain(unsigned int n)
 {
-  if (_chains.empty())
+  if (chains_.empty())
   {
     std::cerr << "ERROR: No Chains found in Model: "
-              << _model_ID << std::endl;
+              << model_ID_ << std::endl;
     exit(EXIT_SUCCESS);
   }
-  if (n >= _chains.size())
+  if (n >= chains_.size())
   {
     std::cerr << "ERROR: Chain number out of range in Model: "
-              << _model_ID << std::endl;
+              << model_ID_ << std::endl;
     exit(EXIT_SUCCESS);
   }
-  return _chains[n];
+  return chains_[n];
 }
 
 inline void Model::add_chain(const Chain& c)
 {
-  _chains.push_back(c);
-  _n_chain++;
+  c.self_check();
+  chains_.push_back(c);
+  n_chain_++;
 }
 
 
 inline void Model::print_sequence(int n) const
 {
   int i = 0;
-  for (i = 0; i < _n_chain; i++) 
-    _chains[i].pr_seq(n);
+  for (i = 0; i < n_chain_; i++) 
+    chains_[i].pr_seq(n);
 }
 
 inline void Model::output_fasta(std::ostream & f_fasta, std::string s) const
 {
   int i = 0;
-  for (i = 0; i < _n_chain; i++) 
-    _chains[i].output_fasta(f_fasta, s);
+  for (i = 0; i < n_chain_; i++) 
+    chains_[i].output_fasta(f_fasta, s);
 }
 
 
 inline int Model::get_model_size() const
 {
-  return _n_chain;
+  return n_chain_;
 }
 
 // Model ===================================================================
 inline Model::Model()
 {
-  _model_ID = 0;
-  _chains.clear();
-  _n_chain = 0;
+  model_ID_ = 0;
+  chains_.clear();
+  n_chain_ = 0;
 }
 
 inline void Model::reset()
 {
-  _model_ID = 0;
-  _chains.clear();
-  _n_chain = 0;
+  model_ID_ = 0;
+  chains_.clear();
+  n_chain_ = 0;
 }
 
 
@@ -123,11 +124,11 @@ void Model::output_cg_pos(std::ostream& o)
 {
   int i = 0;
   int n = 0;
-  for (i = 0; i < _n_chain; i++) {
-    ChainType ct = _chains[i].get_chain_type();
+  for (i = 0; i < n_chain_; i++) {
+    ChainType ct = chains_[i].get_chain_type();
     if (ct == water || ct == other || ct == none)
       continue;
-    _chains[i].output_cg_pos(o, n);
+    chains_[i].output_cg_pos(o, n);
   }
 }
 
@@ -136,14 +137,14 @@ void Model::output_top_mass(std::ostream& o)
   int i = 0;
   int n = 0;
 
-  for (i = 0; i < _n_chain; i++) {
-    ChainType ct = _chains[i].get_chain_type();
+  for (i = 0; i < n_chain_; i++) {
+    ChainType ct = chains_[i].get_chain_type();
     if (ct == water || ct == other || ct == none)
       continue;
     else if (ct == DNA || ct == RNA || ct == na)
-      n += _chains[i].get_chain_length() * 3 - 1;
+      n += chains_[i].get_chain_length() * 3 - 1;
     else
-      n += _chains[i].get_chain_length();
+      n += chains_[i].get_chain_length();
   }
 
   o << "[ particles ]"
@@ -159,11 +160,11 @@ void Model::output_top_mass(std::ostream& o)
     << std::endl;
 
   n = 0;
-  for (i = 0; i < _n_chain; i++) {
-    ChainType ct = _chains[i].get_chain_type();
+  for (i = 0; i < n_chain_; i++) {
+    ChainType ct = chains_[i].get_chain_type();
     if (ct == water || ct == other || ct == none)
       continue;
-    _chains[i].output_top_mass(o, n);
+    chains_[i].output_top_mass(o, n);
   }
   o << std::endl;
 }
@@ -173,14 +174,14 @@ void Model::output_top_bond(std::ostream& o)
   int i = 0;
   int n = 0;
 
-  for (i = 0; i < _n_chain; i++) {
-    ChainType ct = _chains[i].get_chain_type();
+  for (i = 0; i < n_chain_; i++) {
+    ChainType ct = chains_[i].get_chain_type();
     if (ct == water || ct == other || ct == none)
       continue;
     else if (ct == DNA || ct == RNA || ct == na)
-      n += _chains[i].get_chain_length() * 3 - 2;
+      n += chains_[i].get_chain_length() * 3 - 2;
     else
-      n += _chains[i].get_chain_length() - 1;
+      n += chains_[i].get_chain_length() - 1;
   }
 
   o << "[ bonds ]"
@@ -194,11 +195,11 @@ void Model::output_top_bond(std::ostream& o)
     << std::endl;
 
   n = 0;
-  for (i = 0; i < _n_chain; i++) {
-    ChainType ct = _chains[i].get_chain_type();
+  for (i = 0; i < n_chain_; i++) {
+    ChainType ct = chains_[i].get_chain_type();
     if (ct == water || ct == other || ct == none)
       continue;
-    _chains[i].output_top_bond(o, n);
+    chains_[i].output_top_bond(o, n);
   }
   o << std::endl;
 }
@@ -208,14 +209,14 @@ void Model::output_top_angle(std::ostream& o)
   int i = 0;
   int n = 0;
 
-  for (i = 0; i < _n_chain; i++) {
-    ChainType ct = _chains[i].get_chain_type();
+  for (i = 0; i < n_chain_; i++) {
+    ChainType ct = chains_[i].get_chain_type();
     if (ct == water || ct == other || ct == none)
       continue;
     else if (ct == DNA || ct == RNA || ct == na)
-      n += _chains[i].get_chain_length() * 4 - 5;
+      n += chains_[i].get_chain_length() * 4 - 5;
     else
-      n += _chains[i].get_chain_length()-2;
+      n += chains_[i].get_chain_length()-2;
   }
 
   o << "[ angles ]"
@@ -230,11 +231,11 @@ void Model::output_top_angle(std::ostream& o)
     << std::endl;
 
   n = 0;
-  for (i = 0; i < _n_chain; i++) {
-    ChainType ct = _chains[i].get_chain_type();
+  for (i = 0; i < n_chain_; i++) {
+    ChainType ct = chains_[i].get_chain_type();
     if (ct == water || ct == other || ct == none)
       continue;
-    _chains[i].output_top_angle(o, n);
+    chains_[i].output_top_angle(o, n);
   }
   o << std::endl;
 }
@@ -244,14 +245,14 @@ void Model::output_top_dihedral(std::ostream& o)
   int i = 0;
   int n = 0;
 
-  for (i = 0; i < _n_chain; i++) {
-    ChainType ct = _chains[i].get_chain_type();
+  for (i = 0; i < n_chain_; i++) {
+    ChainType ct = chains_[i].get_chain_type();
     if (ct == water || ct == other || ct == none)
       continue;
     else if (ct == DNA || ct == RNA || ct == na)
-      n += _chains[i].get_chain_length() * 2 - 4;
+      n += chains_[i].get_chain_length() * 2 - 4;
     else
-      n += _chains[i].get_chain_length()-3;
+      n += chains_[i].get_chain_length()-3;
   }
 
   o << "[ dihedrals ]"
@@ -268,11 +269,11 @@ void Model::output_top_dihedral(std::ostream& o)
     << std::endl;
 
   n = 0;
-  for (i = 0; i < _n_chain; i++) {
-    ChainType ct = _chains[i].get_chain_type();
+  for (i = 0; i < n_chain_; i++) {
+    ChainType ct = chains_[i].get_chain_type();
     if (ct == water || ct == other || ct == none)
       continue;
-    _chains[i].output_top_dihedral(o, n);
+    chains_[i].output_top_dihedral(o, n);
   }
   o << std::endl;
 }
@@ -284,8 +285,8 @@ void Model::output_top_nonbonded(std::ostream& o)
   Chain c_tmp;
   Residue r_tmp;
 
-  for (i = 0; i < _n_chain; i++) {
-    ChainType ct = _chains[i].get_chain_type();
+  for (i = 0; i < n_chain_; i++) {
+    ChainType ct = chains_[i].get_chain_type();
     if (ct == water || ct == other || ct == none)
       continue;
     if (ct == DNA || ct == RNA || ct == na)
@@ -293,29 +294,29 @@ void Model::output_top_nonbonded(std::ostream& o)
       c_tmp.reset();
 
       r_tmp.reset();
-      r_tmp.add_atom(_chains[i].get_residue(0).get_S());
+      r_tmp.add_atom(chains_[i].get_residue(0).get_S());
       c_tmp.add_residue(r_tmp);
 
       r_tmp.reset();
-      r_tmp.add_atom(_chains[i].get_residue(0).get_B());
+      r_tmp.add_atom(chains_[i].get_residue(0).get_B());
       c_tmp.add_residue(r_tmp);
 
-      for (int j = 1; j < _chains[i].get_chain_length(); j++) {
+      for (int j = 1; j < chains_[i].get_chain_length(); j++) {
         r_tmp.reset();
-        r_tmp.add_atom(_chains[i].get_residue(j).get_P());
+        r_tmp.add_atom(chains_[i].get_residue(j).get_P());
         c_tmp.add_residue(r_tmp);
         r_tmp.reset();
-        r_tmp.add_atom(_chains[i].get_residue(j).get_S());
+        r_tmp.add_atom(chains_[i].get_residue(j).get_S());
         c_tmp.add_residue(r_tmp);
         r_tmp.reset();
-        r_tmp.add_atom(_chains[i].get_residue(j).get_B());
+        r_tmp.add_atom(chains_[i].get_residue(j).get_B());
         c_tmp.add_residue(r_tmp);
       }
       c_tmp.set_chain_type(ct);
       c0 = c0 + c_tmp;
       continue;
     }
-    c0 = c0 + _chains[i];
+    c0 = c0 + chains_[i];
   }
 
   o << "[ native ]"
@@ -332,12 +333,7 @@ void Model::output_top_nonbonded(std::ostream& o)
   o << std::endl;
 }
 
-/*            _
-//   ___  ___| |_ _ __ ___  __ _ _ __ ___
-//  / _ \/ __| __| '__/ _ \/ _` | '_ ` _ \
-// | (_) \__ \ |_| | |  __/ (_| | | | | | |
-//  \___/|___/\__|_|  \___|\__,_|_| |_| |_|
-*/
+
 inline std::ostream& operator<<(std::ostream& o, Model& m)
 {
   o << "MODEL "

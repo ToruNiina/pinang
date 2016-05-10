@@ -29,6 +29,7 @@ class Chain
 
   inline void pr_seq(int n) const;
   inline void output_fasta(std::ostream & f_fasta, std::string s) const;
+  inline void self_check() const;
 
   void output_cg_pos(std::ostream& o, int& n);
   void output_top_mass(std::ostream& o, int& n);
@@ -65,8 +66,8 @@ inline ChainType Chain::get_chain_type() const
 inline void Chain::set_chain_type(ChainType a)
 {
   chain_type_ = a;
-  for (int i = 0; i < n_residue_; i++)
-    residues_[i].set_chain_type(a);
+  // for (int i = 0; i < n_residue_; i++)
+  //   residues_[i].set_chain_type(a);
   // if (a == DNA) {
   //   for (int i = 0; i < residues_[0].get_residue_size(); i++) {
   //     std::string s0 = residues_[0].get_atom(i).atom_name();
@@ -98,9 +99,9 @@ inline Residue& Chain::get_residue(int n)
 
 inline int Chain::add_residue(const Residue& r)
 {
+  r.self_check();
   residues_.push_back(r);
   n_residue_++;
-  chain_type_ = r.get_chain_type();
   return 0;
 }
 
@@ -109,6 +110,24 @@ inline int Chain::get_chain_length() const
   return n_residue_;
 }
 
+inline void Chain::self_check() const
+{
+  for (const Residue& r : residues_) {
+    if (r.get_chain_ID() != chain_ID_ || r.get_chain_type() != chain_type_) {
+      std::cerr << "ERROR: Inconsistent chain ID or chain type in Chain "
+                << chain_ID_ << std::endl;
+      exit(EXIT_SUCCESS);
+    }
+  }
+  if (chain_type_ == protein) {
+    residues_[0].set_term_flag(-1);
+    residues_[n_residue_ - 1].set_term_flag(1);
+  }
+  if (chain_type_ == DNA) {
+    residues_[0].set_term_flag(5);
+    residues_[n_residue_ - 1].set_term_flag(3);
+  }
+}
 
 inline void Chain::pr_seq(int n) const
 {
