@@ -53,26 +53,23 @@ int main(int argc, char *argv[])
   pinang::PDB pdb1(infilename);
 
   std::ofstream ofile(outfilename.c_str());
-  if (mod_flag == 1) {
-    std::cout << " Extracting MODULE " << mod_index
-              << " of " << infilename
-              << " to " << outfilename
-              << std::endl;
-    ofile << pdb1.get_model(mod_index - 1) << std::endl;
-  } else if (pdb1.get_n_models() > 1) {
-    std::cout << " Please choose a MODULE: " ;
-    std::cin >> mod_index;
-    std::cout << " Extracting MODULE " << mod_index
-              << " of " << infilename
-              << " to " << outfilename
-              << std::endl;
-    ofile << pdb1.get_model(mod_index - 1) << std::endl;
-  } else {
-    std::cout << " Re-output " << infilename
-              << " to " << outfilename
-              << std::endl;
-    ofile << pdb1 << std::endl;
+  if (mod_flag != 1) {
+    if (pdb1.get_n_models() == 1)
+    {
+      mod_index = 1;
+    } else {
+      std::cout << " Please choose a MODULE: " ;
+      std::cin >> mod_index;
+    }
   }
+
+
+  std::cout << " Extracting MODULE " << mod_index
+            << " of " << infilename
+            << " to " << outfilename
+            << std::endl;
+  ofile << pdb1.get_model(mod_index - 1);
+  ofile << "END" << std::endl;
 
   return 0;
 }

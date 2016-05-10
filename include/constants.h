@@ -258,7 +258,7 @@ inline std::string PhysicalProperty::get_short_name(const std::string& s)
   }
 }
 
-inline double PhysicalProperty::get_charge(const std::string& s) 
+inline double PhysicalProperty::get_charge(const std::string& s)
 {
   auto search = map_resName_charge.find(s);
   if (search != map_resName_charge.end()) {
@@ -270,7 +270,7 @@ inline double PhysicalProperty::get_charge(const std::string& s)
   }
 }
 
-inline double PhysicalProperty::get_mass(const std::string& s) 
+inline double PhysicalProperty::get_mass(const std::string& s)
 {
   auto search = map_resName_mass.find(s);
   if (search != map_resName_mass.end()) {
@@ -282,7 +282,7 @@ inline double PhysicalProperty::get_mass(const std::string& s)
   }
 }
 
-inline ChainType PhysicalProperty::get_chain_type(const std::string& s) 
+inline ChainType PhysicalProperty::get_chain_type(const std::string& s)
 {
   auto search = map_resName_chainType.find(s);
   if (search != map_resName_chainType.end()) {
