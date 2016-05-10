@@ -6,7 +6,6 @@
 #include <iostream>
 #include <vector>
 #include <cstdlib>
-#include <Eigen/Core>
 
 #include "constants.h"
 #include "atom.h"

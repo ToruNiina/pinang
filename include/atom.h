@@ -131,9 +131,9 @@ inline void Atom::set_resid_name(const std::string& s)
 {
   size_t sz = 3;
   resid_name_ = s;
-  if (atom_name_.size() < sz)
+  if (resid_name_.size() < sz)
   {
-    atom_name_.resize(sz, ' ');
+    resid_name_.resize(sz, ' ');
   }
 }
 

@@ -5,11 +5,9 @@
 
 #include <iostream>
 #include "residue.h"
+#include "myvec.h"
 
 namespace pinang {
-
-double vec_angle (Eigen::Vector3d& v1, Eigen::Vector3d& v2);
-double vec_angle_deg (Eigen::Vector3d& v1, Eigen::Vector3d& v2);
 
 class Chain
 {
@@ -198,7 +196,7 @@ void Chain::output_cg_pos(std::ostream& o, int& n)
   if (chain_type_ == water || chain_type_ == other || chain_type_ == none)
     return;
 
-  o << " - Chain " << chain_ID_ << " : " 
+  o << " - Chain " << chain_ID_ << " : "
     << n_residue_ << std::endl;
   int i = 0;
   if (chain_type_ != DNA && chain_type_ != RNA && chain_type_ != na)
@@ -404,7 +402,7 @@ void Chain::output_top_angle(std::ostream& o, int& n)
            - residues_[i+1].get_C_alpha().get_coordinates();
       v2 = residues_[i+2].get_C_alpha().get_coordinates()
            - residues_[i+1].get_C_alpha().get_coordinates();
-      a = vec_angle_deg (v1, v2);
+      a = MyVec::vec_angle_deg (v1, v2);
       o << std::setw(8) << i+1+n
         << std::setw(6) << i+2+n
         << std::setw(6) << i+3+n
@@ -422,7 +420,7 @@ void Chain::output_top_angle(std::ostream& o, int& n)
          - residues_[0].get_S().get_coordinates();
     v2 = residues_[1].get_P().get_coordinates()
          - residues_[0].get_S().get_coordinates();
-    a = vec_angle_deg (v1, v2);
+    a = MyVec::vec_angle_deg (v1, v2);
     o << std::setw(8) << n+2
       << std::setw(6) << n+1
       << std::setw(6) << n+3
@@ -434,7 +432,7 @@ void Chain::output_top_angle(std::ostream& o, int& n)
          - residues_[1].get_P().get_coordinates();
     v2 = residues_[1].get_S().get_coordinates()
          - residues_[1].get_P().get_coordinates();
-    a = vec_angle_deg (v1, v2);
+    a = MyVec::vec_angle_deg (v1, v2);
     o << std::setw(8) << n+1
       << std::setw(6) << n+3
       << std::setw(6) << n+4
@@ -450,7 +448,7 @@ void Chain::output_top_angle(std::ostream& o, int& n)
            - residues_[i].get_S().get_coordinates();
       v2 = residues_[i].get_B().get_coordinates()
            - residues_[i].get_S().get_coordinates();
-      a = vec_angle_deg (v1, v2);
+      a = MyVec::vec_angle_deg (v1, v2);
       o << std::setw(8) << n
         << std::setw(6) << n+1
         << std::setw(6) << n+2
@@ -462,7 +460,7 @@ void Chain::output_top_angle(std::ostream& o, int& n)
            - residues_[i].get_S().get_coordinates();
       v2 = residues_[i+1].get_P().get_coordinates()
            - residues_[i].get_S().get_coordinates();
-      a = vec_angle_deg (v1, v2);
+      a = MyVec::vec_angle_deg (v1, v2);
       o << std::setw(8) << n
         << std::setw(6) << n+1
         << std::setw(6) << n+3
@@ -474,7 +472,7 @@ void Chain::output_top_angle(std::ostream& o, int& n)
            - residues_[i].get_S().get_coordinates();
       v2 = residues_[i+1].get_P().get_coordinates()
            - residues_[i].get_S().get_coordinates();
-      a = vec_angle_deg (v1, v2);
+      a = MyVec::vec_angle_deg (v1, v2);
       o << std::setw(8) << n+2
         << std::setw(6) << n+1
         << std::setw(6) << n+3
@@ -486,7 +484,7 @@ void Chain::output_top_angle(std::ostream& o, int& n)
            - residues_[i+1].get_P().get_coordinates();
       v2 = residues_[i+1].get_S().get_coordinates()
            - residues_[i+1].get_P().get_coordinates();
-      a = vec_angle_deg (v1, v2);
+      a = MyVec::vec_angle_deg (v1, v2);
       o << std::setw(8) << n+1
         << std::setw(6) << n+3
         << std::setw(6) << n+4
@@ -501,7 +499,7 @@ void Chain::output_top_angle(std::ostream& o, int& n)
          - residues_[i].get_S().get_coordinates();
     v2 = residues_[i].get_B().get_coordinates()
          - residues_[i].get_S().get_coordinates();
-    a = vec_angle_deg (v1, v2);
+    a = MyVec::vec_angle_deg (v1, v2);
     o << std::setw(8) << n
       << std::setw(6) << n+1
       << std::setw(6) << n+2
@@ -531,7 +529,7 @@ void Chain::output_top_dihedral(std::ostream& o, int& n)
            - residues_[i+3].get_C_alpha().get_coordinates();
       n1 = v1.cross(v2);
       n2 = v2.cross(v3);
-      d = vec_angle_deg (n1, n2);
+      d = MyVec::vec_angle_deg (n1, n2);
       o << std::setw(8) << i+1+n
         << std::setw(6) << i+2+n
         << std::setw(6) << i+3+n
@@ -554,7 +552,7 @@ void Chain::output_top_dihedral(std::ostream& o, int& n)
          - residues_[2].get_P().get_coordinates();
     n1 = v1.cross(v2);
     n2 = v2.cross(v3);
-    d = vec_angle_deg (n1, n2);
+    d = MyVec::vec_angle_deg (n1, n2);
     o << std::setw(8) << n + 1
       << std::setw(6) << n + 3
       << std::setw(6) << n + 4
@@ -578,7 +576,7 @@ void Chain::output_top_dihedral(std::ostream& o, int& n)
            - residues_[i+1].get_S().get_coordinates();
       n1 = v1.cross(v2);
       n2 = v2.cross(v3);
-      d = vec_angle_deg (n1, n2);
+      d = MyVec::vec_angle_deg (n1, n2);
       o << std::setw(8) << n
         << std::setw(6) << n + 1
         << std::setw(6) << n + 3
@@ -602,7 +600,7 @@ void Chain::output_top_dihedral(std::ostream& o, int& n)
            - residues_[i+2].get_P().get_coordinates();
       n1 = v1.cross(v2);
       n2 = v2.cross(v3);
-      d = vec_angle_deg (n1, n2);
+      d = MyVec::vec_angle_deg (n1, n2);
       o << std::setw(8) << n + 1
         << std::setw(6) << n + 3
         << std::setw(6) << n + 4
@@ -716,27 +714,6 @@ inline std::ostream& operator<<(std::ostream& o, Chain& c)
   }
   o << "TER   " << std::endl;
   return o;
-}
-
-double vec_angle (Eigen::Vector3d& v1, Eigen::Vector3d& v2)
-{
-  double d1 = (v1.dot(v2))/(v1.norm()*v2.norm());
-  if (d1 >= 0.99999)
-    return 0;
-  if (d1 <= -0.99999)
-    return 3.1415926;
-  return acos(d1);
-}
-
-double vec_angle_deg (Eigen::Vector3d& v1, Eigen::Vector3d& v2)
-{
-  double d1 = (v1.dot(v2))/(v1.norm()*v2.norm());
-  if (d1 >= 0.99999)
-    return 0;
-  if (d1 <= -0.99999)
-    return 180;
-  double ang = acos(d1);
-  return (180 * ang / k_pi);
 }
 
 }
