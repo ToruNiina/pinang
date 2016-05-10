@@ -4,6 +4,7 @@
 #include <fstream>
 #include <cstdlib>
 #include <unistd.h>
+#include <Eigen/Core>
 
 using namespace std;
 
@@ -58,11 +59,11 @@ int main(int argc, char *argv[])
     std::ofstream out_file(out_name.c_str());
 
     std::cout << " Sequence of PDB "
-              << pdb1.pdb_name()
+              << pdb1.get_pdb_name()
               << " :"
               << std::endl;
     std::cout << " Total number of chains: "
-              << pdb1.m_model(0).m_model_size()
+              << pdb1.get_model(0).get_model_size()
               << std::endl;
     std::cout << std::endl;
     std::cout << " 1-char-aa-name : ----------------------------- " << std::endl;

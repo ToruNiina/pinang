@@ -195,32 +195,32 @@ inline int Residue::add_atom(const Atom& a)
     return 1;
   }
   for (const Atom& b : atoms_) {
-    if (a.atom_name() == b.atom_name())
+    if (a.get_atom_name() == b.get_atom_name())
       return 0;
   }  // in case of NMR uncertain multi atoms
   atoms_.push_back(a);
 
-  if (a.atom_name() == "CA  ")
+  if (a.get_atom_name() == "CA  ")
   {
     C_alpha_ = a;
   }
-  if (a.atom_name() == "CB  ")
+  if (a.get_atom_name() == "CB  ")
   {
     C_beta_ = a;
   }
-  if (a.atom_name() == "C3' " || a.atom_name() == "S   " || a.atom_name() == "DS  ")
+  if (a.get_atom_name() == "C3' " || a.get_atom_name() == "S   " || a.get_atom_name() == "DS  ")
   {
     S_ = a;
   }
-  if (a.atom_name() == "P   " || a.atom_name() == "DP  ")
+  if (a.get_atom_name() == "P   " || a.get_atom_name() == "DP  ")
   {
     P_ = a;
   }
-  if (a.atom_name() == "N1  " || a.atom_name() == "B   " || a.atom_name() == "DB  ")
+  if (a.get_atom_name() == "N1  " || a.get_atom_name() == "B   " || a.get_atom_name() == "DB  ")
   {
     B_ = a;
   }
-  if (a.atom_flag() == "HETATM" && a.element() != "H")
+  if (a.get_atom_flag() == "HETATM" && a.get_element() != "H")
   {
     C_alpha_ = a;
   }
@@ -498,10 +498,10 @@ inline double resid_min_distance (Residue& r1, Residue& r2)
   double d = atom_distance(r1.get_atom(0), r2.get_atom(0));  // min_distance;
   double f = 0.0;           // tmp distance;
   for (i = 0; i < r1.get_residue_size(); i++) {
-    if (r1.get_atom(i).element() == "H")
+    if (r1.get_atom(i).get_element() == "H")
       continue;
     for (j = 0; j < r2.get_residue_size(); j++) {
-      if (r2.get_atom(j).element() == "H")
+      if (r2.get_atom(j).get_element() == "H")
         continue;
       f = atom_distance(r1.get_atom(i), r2.get_atom(j));
       if ( d > f)

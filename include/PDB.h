@@ -62,7 +62,7 @@ PDB::PDB(const std::string& s)
     if (atom_tmp.get_atom_flag() == "MODEL ")
     {
       model_tmp.reset();
-      model_tmp.set_model_ID(atom_tmp.serial());
+      model_tmp.set_model_ID(atom_tmp.get_serial());
 
       chain_tmp.reset();
       resid_tmp.reset();
@@ -87,7 +87,7 @@ PDB::PDB(const std::string& s)
       if (resid_tmp.get_residue_size() != 0)
       {
         chain_tmp.add_residue(resid_tmp);
-        chain_tmp.set_chain_ID(resid_tmp.chain_ID());
+        chain_tmp.set_chain_ID(resid_tmp.get_chain_ID());
         chain_tmp.set_chain_type(resid_tmp.get_chain_type());
       }
       if (chain_tmp.get_chain_length() != 0)
@@ -107,7 +107,7 @@ PDB::PDB(const std::string& s)
       if (resid_tmp.get_residue_size() != 0)
       {
         chain_tmp.add_residue(resid_tmp);
-        chain_tmp.set_chain_ID(resid_tmp.chain_ID());
+        chain_tmp.set_chain_ID(resid_tmp.get_chain_ID());
         chain_tmp.set_chain_type(resid_tmp.get_chain_type());
       }
       if (chain_tmp.get_chain_length() != 0)
@@ -149,11 +149,11 @@ PDB::PDB(const std::string& s)
         resid_tmp.add_atom(atom_tmp);
       }
     }
-    if (atom_tmp.atom_flag() == "HETATM")
+    if (atom_tmp.get_atom_flag() == "HETATM")
     {
       if (resid_tmp.add_atom(atom_tmp))
       {
-        if (resid_tmp.m_residue_size() != 0)
+        if (resid_tmp.get_residue_size() != 0)
         {
           chain_tmp.add_residue(resid_tmp);
           chain_tmp.set_chain_ID(resid_tmp.get_chain_ID());

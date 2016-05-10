@@ -3,6 +3,8 @@
 #ifndef PINANG_ATOM_H_
 #define PINANG_ATOM_H_
 
+#include <iostream>
+#include <iomanip>
 #include <string>
 #include <sstream>
 #include <Eigen/Core>
@@ -176,7 +178,7 @@ inline void Atom::set_coords(const Eigen::Vector3d& coors)
 }
 inline void Atom::set_coords(double x, double y, double z)
 {
-  coordinate_ << x << y << z;
+  coordinate_ << x , y , z;
 }
 
 
@@ -271,7 +273,7 @@ inline void Atom::reset()
 inline std::ostream& operator<<(std::ostream& o, const Atom& a)
 {
   Eigen::Vector3d tmp_coors = a.get_coordinates();
-  if (a.atom_flag() == "ATOM  " || a.atom_flag() == "HETATM")
+  if (a.get_atom_flag() == "ATOM  " || a.get_atom_flag() == "HETATM")
   {
     o << std::setw(6) << a.get_atom_flag()
       << std::setw(5) << a.get_serial() << " "
@@ -315,7 +317,7 @@ std::istream& operator>>(std::istream& i, Atom& a)
   tmp_str = pdb_line.substr(0,6);
   a.set_atom_flag(tmp_str);
 
-  if (a.atom_flag() == "ATOM  " || a.atom_flag() == "HETATM")
+  if (a.get_atom_flag() == "ATOM  " || a.get_atom_flag() == "HETATM")
   {
     tmp_sstr.str(pdb_line.substr(6,5));
     tmp_sstr >> tmp_ui;
@@ -396,10 +398,10 @@ std::istream& operator>>(std::istream& i, Atom& a)
     }
     tmp_sstr.clear();
     tmp_str.clear();
-  } else if (a.atom_flag() == "MODEL ") {
+  } else if (a.get_atom_flag() == "MODEL ") {
     tmp_sstr.str(pdb_line.substr(10,4));
-    tmp_sstr >> _tmp_ui;
-    a.set_serial(_tmp_ui);  // Actually this is the model index (serial);
+    tmp_sstr >> tmp_ui;
+    a.set_serial(tmp_ui);  // Actually this is the model index (serial);
     tmp_sstr.clear();
   } else {
     // std::cerr << "ERROR: Wrong PDB ATOM format!" << std::endl;

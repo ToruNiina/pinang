@@ -5,6 +5,7 @@
 
 #include <map>
 #include <string>
+#include <cstdlib>
 
 namespace pinang {
 
@@ -34,14 +35,14 @@ class PhysicalProperty
   inline std::string get_short_name(const std::string& s) const;
   inline double get_charge(const std::string& s) const;
   inline double get_mass(const std::string& s) const;
-  inline double get_chain_type(const std::string& s) const;
+  inline ChainType get_chain_type(const std::string& s) const;
 
  private:
   std::map<std::string, std::string> map_resName_shortName;
   std::map<std::string, double> map_resName_charge;
   std::map<std::string, double> map_resName_mass;
   std::map<std::string, ChainType> map_resName_chainType;
-}
+};
 
 inline PhysicalProperty::PhysicalProperty()
 {
@@ -245,24 +246,48 @@ PhysicalProperty::~PhysicalProperty() {
   map_resName_chainType.clear();
 }
 
-inline char get_short_name(const std::string& s) const
+inline std::string PhysicalProperty::get_short_name(const std::string& s) const
 {
-  return map_resName_shortName[s];
+  auto search = map_resName_shortName.find(s);
+  if (search != map_resName_shortName.end()) {
+    return search->second;
+  } else {
+    std::cerr << " ERROR: Cannot find residue name: " << s << std::endl;
+    exit(EXIT_FAILURE);
+  }
 }
 
-inline double get_charge(const std::string& s) const
+inline double PhysicalProperty::get_charge(const std::string& s) const
 {
-  return map_resName_charge[s];
+  auto search = map_resName_charge.find(s);
+  if (search != map_resName_charge.end()) {
+    return search->second;
+  } else {
+    std::cerr << " ERROR: Cannot find residue name: " << s << std::endl;
+    exit(EXIT_FAILURE);
+  }
 }
 
-inline double get_mass(const std::string& s) const
+inline double PhysicalProperty::get_mass(const std::string& s) const
 {
-  return map_resName_mass[s];
+  auto search = map_resName_mass.find(s);
+  if (search != map_resName_mass.end()) {
+    return search->second;
+  } else {
+    std::cerr << " ERROR: Cannot find residue name: " << s << std::endl;
+    exit(EXIT_FAILURE);
+  }
 }
 
-inline double get_chain_type(const std::string& s) const
+inline ChainType PhysicalProperty::get_chain_type(const std::string& s) const
 {
-  return map_resName_chainType[s];
+  auto search = map_resName_chainType.find(s);
+  if (search != map_resName_chainType.end()) {
+    return search->second;
+  } else {
+    std::cerr << " ERROR: Cannot find residue name: " << s << std::endl;
+    exit(EXIT_FAILURE);
+  }
 }
 
 }

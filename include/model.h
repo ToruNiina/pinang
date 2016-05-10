@@ -20,7 +20,7 @@ class Model
   inline void set_model_ID(int n);
 
   inline Chain& get_chain(unsigned int n);
-  inline void add_chain(const Chain& c);
+  inline void add_chain(Chain& c);
 
   inline void print_sequence(int n) const;
   inline void output_fasta(std::ostream & f_fasta, std::string s) const;
@@ -69,7 +69,7 @@ inline Chain& Model::get_chain(unsigned int n)
   return chains_[n];
 }
 
-inline void Model::add_chain(const Chain& c)
+inline void Model::add_chain(Chain& c)
 {
   c.self_check();
   chains_.push_back(c);
