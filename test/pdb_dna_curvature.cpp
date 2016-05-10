@@ -292,34 +292,56 @@ int main(int argc, char *argv[])
   int k = backbone1_dots.size();
   int l = backbone1_nodes.size();
   for (i = 0; i < int(backbone1_dots.size()); i++) {
+    double x = backbone1_dots[i](0);
+    double y = backbone1_dots[i](1);
+    double z = backbone1_dots[i](2);
     if (i % 10 == 0) {
       back_file << std::setw(6) << "HETATM" << std::setw(5) << i+1 << " "
                 << std::setw(4) << "C   "   << std::setw(1) << " "
                 << std::setw(3) << "CUR" << " " << std::setw(1) << "A"
                 << std::setw(4) << i/10+2 << std::setw(1) << " " << "   "
-                << backbone1_dots[i] << std::endl;
+                << std::setiosflags(std::ios_base::fixed) << std::setprecision(3)
+                << std::setw(8) << x
+                << std::setw(8) << y
+                << std::setw(8) << z
+                << std::endl;
     } else {
       back_file << std::setw(6) << "HETATM" << std::setw(5) << i+1 << " "
                 << std::setw(4) << "O   " << std::setw(1) << " "
                 << std::setw(3) << "CUR" << " " << std::setw(1) << "A"
                 << std::setw(4) << i/10+2 << std::setw(1) << " " << "   "
-                << backbone1_dots[i] << std::endl;
+                << std::setiosflags(std::ios_base::fixed) << std::setprecision(3)
+                << std::setw(8) << x
+                << std::setw(8) << y
+                << std::setw(8) << z
+                << std::endl;
     }
   }
   back_file << "TER" << std::endl;
   for (i = 0; i < int(backbone2_dots.size()); i++) {
+    double x = backbone2_dots[i](0);
+    double y = backbone2_dots[i](1);
+    double z = backbone2_dots[i](2);
     if (i % 10 == 0) {
       back_file << std::setw(6) << "HETATM" << std::setw(5) << i+1+k << " "
                 << std::setw(4) << "C   "   << std::setw(1) << " "
                 << std::setw(3) << "CUR" << " " << std::setw(1) << "B"
                 << std::setw(4) << i/10+l+3 << std::setw(1) << " " << "   "
-                << backbone2_dots[i] << std::endl;
+                << std::setiosflags(std::ios_base::fixed) << std::setprecision(3)
+                << std::setw(8) << x
+                << std::setw(8) << y
+                << std::setw(8) << z
+                << std::endl;
     } else {
       back_file << std::setw(6) << "HETATM" << std::setw(5) << i+1+k << " "
                 << std::setw(4) << "O   " << std::setw(1) << " "
                 << std::setw(3) << "CUR" << " " << std::setw(1) << "B"
                 << std::setw(4) << i/10+l+3 << std::setw(1) << " " << "   "
-                << backbone2_dots[i] << std::endl;
+                << std::setiosflags(std::ios_base::fixed) << std::setprecision(3)
+                << std::setw(8) << x
+                << std::setw(8) << y
+                << std::setw(8) << z
+                << std::endl;
     }
   }
 
@@ -383,13 +405,21 @@ int main(int argc, char *argv[])
                    << std::setw(4) << "C   "   << std::setw(1) << " "
                    << std::setw(3) << "GEN" << " " << std::setw(1) << "A"
                    << std::setw(4) << (j/50) * 10 + i + 1 << std::setw(1) << " " << "   "
-                   << genline1_dots[j] << std::endl;
+                   << std::setiosflags(std::ios_base::fixed) << std::setprecision(3)
+                   << std::setw(8) << genline1_dots[j](0)
+                   << std::setw(8) << genline1_dots[j](1)
+                   << std::setw(8) << genline1_dots[j](2)
+                   << std::endl;
       } else {
         gline_file << std::setw(6) << "HETATM" << std::setw(5) << j+1 << " "
                    << std::setw(4) << "O   " << std::setw(1) << " "
                    << std::setw(3) << "GEN" << " " << std::setw(1) << "A"
                    << std::setw(4) << (j/50) * 10 + i + 1 << std::setw(1) << " " << "   "
-                   << genline1_dots[j] << std::endl;
+                   << std::setiosflags(std::ios_base::fixed) << std::setprecision(3)
+                   << std::setw(8) << genline1_dots[j](0)
+                   << std::setw(8) << genline1_dots[j](1)
+                   << std::setw(8) << genline1_dots[j](2)
+                   << std::endl;
       }
     }
     gline_file << "TER" << std::endl;
@@ -399,13 +429,21 @@ int main(int argc, char *argv[])
                    << std::setw(4) << "C   "   << std::setw(1) << " "
                    << std::setw(3) << "GEN" << " " << std::setw(1) << "B"
                    << std::setw(4) << j/50 * 10 + l + i + 1 << std::setw(1) << " " << "   "
-                   << genline2_dots[j] << std::endl;
+                   << std::setiosflags(std::ios_base::fixed) << std::setprecision(3)
+                   << std::setw(8) << genline2_dots[j](0)
+                   << std::setw(8) << genline2_dots[j](1)
+                   << std::setw(8) << genline2_dots[j](2)
+                   << std::endl;
       } else {
         gline_file << std::setw(6) << "HETATM" << std::setw(5) << j+1+k << " "
                    << std::setw(4) << "O   " << std::setw(1) << " "
                    << std::setw(3) << "GEN" << " " << std::setw(1) << "B"
                    << std::setw(4) << j/50 * 10 + l + i + 1 << std::setw(1) << " " << "   "
-                   << genline2_dots[j] << std::endl;
+                   << std::setiosflags(std::ios_base::fixed) << std::setprecision(3)
+                   << std::setw(8) << genline2_dots[j](0)
+                   << std::setw(8) << genline2_dots[j](1)
+                   << std::setw(8) << genline2_dots[j](2)
+                   << std::endl;
       }
     }
     gline_file << "TER" << std::endl;
@@ -465,12 +503,21 @@ int main(int argc, char *argv[])
               << std::setw(4) << "C   " << std::setw(1) << " "
               << std::setw(3) << "AXS" << " " << std::setw(1) << "A"
               << std::setw(4) << j+1 << std::setw(1) << " " << "   "
-              << backbone1_nodes[j] << std::endl;
+              << std::setiosflags(std::ios_base::fixed) << std::setprecision(3)
+              << std::setw(8) << backbone1_nodes[j](0)
+              << std::setw(8) << backbone1_nodes[j](1)
+              << std::setw(8) << backbone1_nodes[j](2)
+              << std::endl;
+    Eigen::Vector3d v_t = backbone1_nodes[j] + backbone1_normals[j] * 5;
     norm_file << std::setw(6) << "HETATM" << std::setw(5) << 3 * j+2 << " "
               << std::setw(4) << "O   " << std::setw(1) << " "
               << std::setw(3) << "AXS" << " " << std::setw(1) << "A"
               << std::setw(4) << j+1 << std::setw(1) << " " << "   "
-              << backbone1_nodes[j] + backbone1_normals[j] * 5 << std::endl;
+              << std::setiosflags(std::ios_base::fixed) << std::setprecision(3)
+              << std::setw(8) << v_t(0)
+              << std::setw(8) << v_t(1)
+              << std::setw(8) << v_t(2)
+              << std::endl;
   }
   // connecting points!
   for (j = 0; j < int(backbone1_nodes.size()); j++) {
@@ -605,12 +652,20 @@ int main(int argc, char *argv[])
               << std::setw(4) << "C   " << std::setw(1) << " "
               << std::setw(3) << "AXS" << " " << std::setw(1) << "A"
               << std::setw(4) << j+1 << std::setw(1) << " " << "   "
-              << axis_nodes[j] << std::endl;
+              << std::setiosflags(std::ios_base::fixed) << std::setprecision(3)
+              << std::setw(8) << axis_nodes[j](0)
+              << std::setw(8) << axis_nodes[j](1)
+              << std::setw(8) << axis_nodes[j](2)
+              << std::endl;
     norm_file << std::setw(6) << "HETATM" << std::setw(5) << 3 * j+3 << " "
               << std::setw(4) << "C   " << std::setw(1) << " "
               << std::setw(3) << "AXS" << " " << std::setw(1) << "A"
               << std::setw(4) << j+1 << std::setw(1) << " " << "   "
-              << axis_nodes[j] << std::endl;
+              << std::setiosflags(std::ios_base::fixed) << std::setprecision(3)
+              << std::setw(8) << axis_nodes[j](0)
+              << std::setw(8) << axis_nodes[j](1)
+              << std::setw(8) << axis_nodes[j](2)
+              << std::endl;
   }
   // connecting points!
   for (j = 4; j < int(axis_nodes.size())-5; j++) {
@@ -912,12 +967,20 @@ int main(int argc, char *argv[])
                   << std::setw(4) << "C   " << std::setw(1) << " "
                   << std::setw(3) << "GRV" << " " << std::setw(1) << "A"
                   << std::setw(4) << j+1 << std::setw(1) << " " << "   "
-                  << I1_0 << std::endl;
+                  << std::setiosflags(std::ios_base::fixed) << std::setprecision(3)
+                  << std::setw(8) << I1_0(0)
+                  << std::setw(8) << I1_0(1)
+                  << std::setw(8) << I1_0(2)
+                  << std::endl;
       groove_file << std::setw(6) << "HETATM" << std::setw(5) << 4 * i+2 << " "
                   << std::setw(4) << "N   " << std::setw(1) << " "
                   << std::setw(3) << "GRV" << " " << std::setw(1) << "B"
                   << std::setw(4) << j+1 << std::setw(1) << " " << "   "
-                  << I2_0 << std::endl;
+                  << std::setiosflags(std::ios_base::fixed) << std::setprecision(3)
+                  << std::setw(8) << I2_0(0)
+                  << std::setw(8) << I2_0(1)
+                  << std::setw(8) << I2_0(2)
+                  << std::endl;
       groove_file << std::setw(6) << "CONECT"
                   << std::setw(5) << 4*i + 1
                   << std::setw(5) << 4*i + 2
@@ -929,12 +992,20 @@ int main(int argc, char *argv[])
                   << std::setw(4) << "O   " << std::setw(1) << " "
                   << std::setw(3) << "GRV" << " " << std::setw(1) << "A"
                   << std::setw(4) << j+1 << std::setw(1) << " " << "   "
-                  << I3_0 << std::endl;
+                  << std::setiosflags(std::ios_base::fixed) << std::setprecision(3)
+                  << std::setw(8) << I3_0(0)
+                  << std::setw(8) << I3_0(1)
+                  << std::setw(8) << I3_0(2)
+                  << std::endl;
       groove_file << std::setw(6) << "HETATM" << std::setw(5) << 4 * i+4 << " "
                   << std::setw(4) << "S   " << std::setw(1) << " "
                   << std::setw(3) << "GRV" << " " << std::setw(1) << "B"
                   << std::setw(4) << j+1 << std::setw(1) << " " << "   "
-                  << I4_0 << std::endl;
+                  << std::setiosflags(std::ios_base::fixed) << std::setprecision(3)
+                  << std::setw(8) << I4_0(0)
+                  << std::setw(8) << I4_0(1)
+                  << std::setw(8) << I4_0(2)
+                  << std::endl;
       groove_file << std::setw(6) << "CONECT"
                   << std::setw(5) << 4*i + 3
                   << std::setw(5) << 4*i + 4
